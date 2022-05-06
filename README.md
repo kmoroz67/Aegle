@@ -41,7 +41,7 @@
 ## Запуск вычислений
 #### 1. Склонировать репозиторий на локальную машину
 
-    $ git clone git@bitbucket.org:bostongene/aesculapius.git
+    $ git clone https://github.com/kmoroz67/Aegle.git
 
 #### 2. Зайти в папку проекта
 
