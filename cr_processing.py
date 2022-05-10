@@ -1,13 +1,3 @@
-import pandas as pd
-import numpy as np
-import math
-import os
-from pathlib import Path
-import warnings
-
-warnings.simplefilter('ignore')
-pd.set_option('display.max_columns', None) 
-
 TCR_AB_LEN_RANGE = range(24, 61, 3)
 TCR_G_LEN_RANGE = range(12, 61, 3)
 TCR_D_LEN_RANGE = range(12, 91, 3)
