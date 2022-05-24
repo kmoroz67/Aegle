@@ -51,7 +51,7 @@
 
 Пример запуска скрипта из консоли:
 
-    $ python3.7 main.py -u isemenov --dbase tcga --n_start 0 --n_end 7
+    $ python3.7 main.py -u kmorozov --dbase tcga --n_start 0 --n_end 7
 
 Получить краткую справку об используемых параметрах можно c помощью следующей команды:
 
