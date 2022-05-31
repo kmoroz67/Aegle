@@ -1,128 +1,121 @@
 
 
-## Введение
-Данный пайплайн представляет собой инструмент для определения клонотипов T и B клеточных рецепторов, 
-а также основных типов аллелей HLA в образце по данным РНК-секвенирования.
+## Introduction
+This pipeline is a tool for determining the clonotypes of T and B cell receptors,
+as well as the main types of HLA class 1 and 2 alleles and gene expression in the sample according to RNA sequencing.
 
-Для этого в пайплайн внедрены такие тулы как:
+List of used bioinformatics tools:
 
-- [fasterq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) - инструмент для конвертации  SRA данных в .fastq формат; 
-является более быстрой версией инструмента fastq-dump
+- [MultiQC](https://github.com/ewels/MultiQC) - tool for RNA-seq data QC
 
-- [MiXCR](https://github.com/milaboratory/mixcr) - универсальный инструмент для быстрого и точного анализа T- и B клеточного репертуара на основе данных NGS.
+- [fasterq-dump](https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump) - tool for converting SRA data to .fastq format;
+is a faster version of the fastq-dump tool
 
-- [Optitype](https://github.com/FRED-2/OptiType) - алгоритм для HLA генотипирования на основе данных NGS. Позволяет определять аллели HLA 1-го класса.
+- [MiXCR](https://github.com/milaboratory/mixcr) - versatile tool for fast and accurate analysis of T- and B cell repertoire based on NGS data.
 
-Подробное описание работы пайплайна доступно по [ссылке](https://bostongene.atlassian.net/wiki/spaces/BLOOD/pages/2569896111/Aesculapius+pipeline)
+- [Optitype](https://github.com/FRED-2/OptiType) - algorithm for HLA genotyping based on NGS data. Allows you to determine the alleles of HLA class 1.
 
-## Структура пайплайна:  
-Пайплайн разбит на несколько файлов:
+- [Kallisto](https://chmi-sops.github.io/mydoc_kallisto.html) - Pseudoaligner for quick genes expression calculation. Returns expressions in TPM and counts.
 
-- functions.py, в котором собраны все используемые в пайплайне функции
-- geo_downloader.py, в котором находится тело пайплайна по скачиванию и процессингу данных из базы данных GEO (Gene Expression Omnibus)
-- tgca_downloader.py, в котором находится тело пайплайна по скачиванию и процессингу данных из базы данных GDC (Genomic Data Commons)
-- main.py, из которого в зависимости от передаваемого параметра вызывается либо geo_downloader.py, либо tcga_downloader.py
+- [Seq2HLA](https://github.com/TRON-Bioinformatics/seq2HLA) - In-silico method written in Python and R to determine HLA class 1/2 genotypes of a sample.
 
-## Предварительные настройки
+## Pipeline structure:  
+Pipeline consists of several scripts:
 
-**2. Настроить работу fasterq-dump**  
+- functions.py, which contains all the functions used in the pipeline
+- geo_downloader.py, which contains the part of the pipeline for downloading and processing data from the GEO database (Gene Expression Omnibus)
+- tgca_downloader.py, which contains the part of the pipeline for downloading and processing data from the GDC database (Genomic Data Commons)
+- main.py, from which, depending on the parameter passed, either geo_downloader.py or tcga_downloader.py is called
+- install_libs.sh, bash script for installation of required python libraries
 
-Скачать [архив](https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.9/sratoolkit.2.10.9-centos_linux64.tar.gz) и распаковать на локальной машине в папку ncbi.  
+## Set ups
+
+**2. Set up fasterq-dump**  
+
+Download archive (https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.9/sratoolkit.2.10.9-centos_linux64.tar.gz) and unpack to the folder named "ncbi".  
 	
 	$ tar -xvzf sratoolkit.2.10.9-centos_linux64-cloud.tar.gz -C ./ncbi
 	
-    $ docker pull fred2/optitype
+Pull docker (if run at local machine/computer use sudo docker pull):
+   	$ docker pull fred2/optitype
 	
-**4. Установить инструмент samtools**
+**3. Install dependencies**	
+
+Run bash script to install libraries to your python virtual environment
+	$ ./install_libs.sh
+	
+You also can install all dependencies using pip/pip3 in "hand mode"
+
+**4. Install samtools**
 
 	$ apt update
 	$ apt install samtools
 
-## Запуск вычислений
-#### 1. Склонировать репозиторий на локальную машину
+## Calculation set up
+#### 1. Clone git repository
 
     $ git clone https://github.com/kmoroz67/Aegle.git
 
-#### 2. Зайти в папку проекта
+#### 2. Change directory to Aegle
 
-    $ cd aesculapius/
+    $ cd Aegle/
 
-#### 3. Запустить пайплайн  
+#### 3. Run pipeline  
 
-Пример запуска скрипта из консоли:
+Example of run from linux terminal:
 
-    $ python3.7 main.py -u kmorozov --dbase tcga --n_start 0 --n_end 7
+!parameters in round bracers () is optional
 
-Получить краткую справку об используемых параметрах можно c помощью следующей команды:
+    $ python main.py (-u <user_name>) --dbase tcga --n_start 0 --n_end 7
 
-    $ python3.7 main.py -h
+You can get a brief summary of the parameters used with the following command:
 
-## Консольный интерфейс инструмента
-Данный инструмент представляет из себя консольную утиллиту, которая поддерживает следующие параметры:
+    $ python main.py -h
 
-- -u / --user (опицональное) название юзера, в домашней папке которого будет создаваться папка mixcr_calc для хранения промежуточных результатов. 
-	По умолчанию указывается название юзера, от имени которого запускается пайплайн.
+## Console interface
+This tool is a console utility that supports the following options:
+
+- -u / --user (optional) The name of the user in whose home folder the mixcr_calc folder will be created to store intermediate results.
+By default, the name of the user on behalf of which the pipeline is launched is indicated.
 	
-- --dbase - название базы данных, из которой скачиваются и процессируются данные: geo или tcga
+- --dbase - the name of the database from which the data is downloaded and processed: geo or tcga
 	
-- --n_start - номер первого ядра из диапазона ядер, которые будут задействованы под расчеты MiXCR
+- --n_start - number of the first cpu from the range of cpus that will be used for MiXCR calculations
 
-- --n_end - номер последнего ядра из диапазона ядер, которые будут задействованы под расчеты MiXCR
+- --n_end - number of the last cpu from the range of cpus that will be used for MiXCR calculations
 
-	Так же доступен флаг -h / --help, отображающий краткую справку об использовании инструмента
+	The -h / --help flag is also available, displaying brief help about using the tool
 
-## Хранение данных
+## Results storage
 
-Изначально данные считаются на локальной машине в папке calc_mixcr, затем переносятся на /uftp
+Absolute path: **/<user>/calculated_datasets/...**
 
-Абсолютный путь: **/uftp/Blood/db_calc_pipeline**
+The downloaded data has the following structure:  dataset --> sample --> results folders
 
-Скаченные данные имеют следующую структуру:  dataset --> sample --> hla, results  
+- hla1_results - folder with Optitype results 
 
-- hla - папка с результатами работы Optitype  
-
-- results - папка с результатами работы MiXCR
-
-Также имеется папка **tmp**, в которой хранятся следующие файлы:  
-
-Для данных с GEO:
-
-- **ann_calc_slice.csv** - срез таблицы Annotation calculated   
-
-	Run - название рана  
-	Sample  - название образца  
-	Dataset - название датасета  
-	Layout  - тип рана (single или paired)  
-	n_repeats - количество попыток запустить fasterq-dump и скачать .fastq файлы  
+- mixcr_results - folder with MiXCR results
 	
-- **download_process_samples.csv** - список образцов, которые попали в очередь на обработку пайплайном
-
-	Sample - название образца  
-
-- **fastqdump_validation.csv**
-
-	Run - название рана   
-	Sample - название образца  
-	Dataset - название датасета  
-	Mark - оценка того, удалось ли скачать .fastq файлы или нет  
-	N_repeats - количество попыток запустить fasterq-dump и скачать .fastq файлы  
+- kallisto_results - folder with Kallisto results
 	
-- **optitype_validation.csv**  
+- seq2hla_results - folder with Seq2HLA results
 
- 	Sample - название образца  
-	Dataset - название датасета  
-	Label - тип рана (single или paired)  
-	Mark - оценка того, удачно ди был запущен Optitype
+There is also a **tmp** folder that contains the following files: 
 
-- **mixcr_validation.csv**
+For data from the GEO portal:
 
-	Sample - название образца  
-	Dataset - название датасета  
-	Layout - тип рана (single или paired)  
-	Mark  - оценка того, удачно ли был запущен MiXCR
+- **ann_calc_slice.csv** - table of calculation queue   
+
+	Run - run name   
+	Sample - sample name  
+	Dataset - dataset name
+	
+Layout of the data (paired or single) will be determined automatically.
+	
+- **download_process_samples.csv** - list of samples that were queued for processing by the pipeline
+
+	Sample - sample name 
 	
 - **pipeline.log**
 	
-	Содержит в себе логи по работе файла geo_downloader.py
-	
-Для данных с TCGA аналогичные файлы, только с приставкой tcga_...
+	Contains logs on the operation of the geo_downloader.py file
