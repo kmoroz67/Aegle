@@ -1,7 +1,7 @@
 
 
 ## Introduction
-This pipeline is a tool for determining the clonotypes of T and B cell receptors,
+This pipeline is a tool for determining the clonotypes of T and B cell receptor repertoires,
 as well as the main types of HLA class 1 and 2 alleles and gene expression in the sample according to RNA sequencing.
 
 List of used bioinformatics tools:
