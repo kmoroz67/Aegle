@@ -90,7 +90,7 @@ By default, the name of the user on behalf of which the pipeline is launched is 
 
 ## Results storage
 
-Absolute path: **/<user>/calculated_datasets/...**
+Absolute path: **/<user_name>/calculated_datasets/...**
 
 The downloaded data has the following structure:  dataset --> sample --> results folders
 
