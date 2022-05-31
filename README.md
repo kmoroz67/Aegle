@@ -37,11 +37,13 @@ Download archive (https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.9/sratoolkit.2
 	$ tar -xvzf sratoolkit.2.10.9-centos_linux64-cloud.tar.gz -C ./ncbi
 	
 Pull docker (if run at local machine/computer use sudo docker pull):
+
    	$ docker pull fred2/optitype
 	
 **3. Install dependencies**	
 
 Run bash script to install libraries to your python virtual environment
+
 	$ ./install_libs.sh
 	
 You also can install all dependencies using pip/pip3 in "hand mode"
