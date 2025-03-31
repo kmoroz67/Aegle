@@ -30,7 +30,7 @@ Pipeline consists of several scripts:
 
 ## Set ups
 
-**2. Set up fasterq-dump**  
+**1. Set up fasterq-dump**  
 
 Download archive (https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.10.9/sratoolkit.2.10.9-centos_linux64.tar.gz) and unpack to the folder named "ncbi".  
 	
@@ -40,7 +40,7 @@ Pull docker (if run at local machine/computer use sudo docker pull):
 
    	$ docker pull fred2/optitype
 	
-**3. Install dependencies**	
+**2. Install dependencies**	
 
 Run bash script to install libraries to your python virtual environment
 
@@ -48,7 +48,7 @@ Run bash script to install libraries to your python virtual environment
 	
 You also can install all dependencies using pip/pip3 in "hand mode"
 
-**4. Install samtools**
+**3. Install samtools**
 
 	$ apt update
 	$ apt install samtools
